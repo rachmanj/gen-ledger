@@ -1,0 +1,16 @@
+### Generate Account Statement
+POST http://localhost:8000/api/v1/statements
+Content-Type: application/json
+
+{
+    "account_number": "11101001",
+    "start_date": "2025-01-01",
+    "end_date": "2025-01-31"
+}
+
+###
+GET http://localhost:8000/test-route
+
+###
+GET http://localhost:8000/api/test
+
