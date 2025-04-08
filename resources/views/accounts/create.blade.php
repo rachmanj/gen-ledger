@@ -90,6 +90,31 @@
                     @enderror
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="opening_balance">Opening Balance</label>
+                            <input type="number" step="0.01"
+                                class="form-control @error('opening_balance') is-invalid @enderror" id="opening_balance"
+                                name="opening_balance" value="{{ old('opening_balance') }}">
+                            @error('opening_balance')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="opening_balance_date">Opening Balance Date</label>
+                            <input type="date" class="form-control @error('opening_balance_date') is-invalid @enderror"
+                                id="opening_balance_date" name="opening_balance_date"
+                                value="{{ old('opening_balance_date') }}">
+                            @error('opening_balance_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" value="1"

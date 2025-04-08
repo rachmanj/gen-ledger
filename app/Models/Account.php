@@ -15,11 +15,15 @@ class Account extends Model
         'normal_balance',
         'description',
         'parent_account_id',
+        'opening_balance',
+        'opening_balance_date',
         'is_active'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'opening_balance' => 'decimal:2',
+        'opening_balance_date' => 'date'
     ];
 
     public function accountType(): BelongsTo

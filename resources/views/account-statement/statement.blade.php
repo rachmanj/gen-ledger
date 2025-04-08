@@ -19,6 +19,25 @@
         </div>
 
         <div class="card-body">
+            <!-- Debug info -->
+            @if (app()->environment('local'))
+                <div class="alert alert-info mb-3">
+                    <h5>Debug Info:</h5>
+                    <p>First transaction in statement:</p>
+                    @if (count($statementLines) > 1)
+                        @php $firstTx = $statementLines[1]; @endphp
+                        <pre>
+                        Date: {{ $firstTx['date'] }}
+                        Description: {{ $firstTx['description'] }}
+                        Doc Number: {{ $firstTx['doc_num'] }}
+                        Original debit value: {{ $firstTx['debit'] }} 
+                        Original credit value: {{ $firstTx['credit'] }}
+                        Original balance value: {{ $firstTx['balance'] }}
+                    </pre>
+                    @endif
+                </div>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -35,9 +54,9 @@
                             <tr>
                                 <td>{{ $line['date'] }}</td>
                                 <td>{{ $line['description'] }}</td>
-                                <td class="text-end">{{ number_format($line['debit'], 2) }}</td>
-                                <td class="text-end">{{ number_format($line['credit'], 2) }}</td>
-                                <td class="text-end">{{ number_format($line['balance'], 2) }}</td>
+                                <td class="text-end">{{ $line['debit'] }}</td>
+                                <td class="text-end">{{ $line['credit'] }}</td>
+                                <td class="text-end">{{ $line['balance'] }}</td>
                             </tr>
                         @endforeach
                     </tbody>

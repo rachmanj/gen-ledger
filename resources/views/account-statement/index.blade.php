@@ -179,33 +179,51 @@
                                     data: 'debit',
                                     className: 'text-end',
                                     render: function(data) {
-                                        return parseFloat(data).toLocaleString(
-                                            'en-US', {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2
-                                            });
+                                        // For API response, data will be numeric
+                                        // Format using Indonesian locale (. as thousands separator, , as decimal)
+                                        if (typeof data === 'number') {
+                                            return data.toLocaleString(
+                                                'id-ID', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                });
+                                        }
+                                        // If data is already a formatted string, return as is
+                                        return data;
                                     }
                                 },
                                 {
                                     data: 'credit',
                                     className: 'text-end',
                                     render: function(data) {
-                                        return parseFloat(data).toLocaleString(
-                                            'en-US', {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2
-                                            });
+                                        // For API response, data will be numeric
+                                        // Format using Indonesian locale (. as thousands separator, , as decimal)
+                                        if (typeof data === 'number') {
+                                            return data.toLocaleString(
+                                                'id-ID', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                });
+                                        }
+                                        // If data is already a formatted string, return as is
+                                        return data;
                                     }
                                 },
                                 {
                                     data: 'balance',
                                     className: 'text-end',
                                     render: function(data) {
-                                        return parseFloat(data).toLocaleString(
-                                            'en-US', {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2
-                                            });
+                                        // For API response, data will be numeric
+                                        // Format using Indonesian locale (. as thousands separator, , as decimal)
+                                        if (typeof data === 'number') {
+                                            return data.toLocaleString(
+                                                'id-ID', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                });
+                                        }
+                                        // If data is already a formatted string, return as is
+                                        return data;
                                     }
                                 }
                             ],
