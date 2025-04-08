@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AccountTypeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountStatementController;
+use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Route;
 
 // Test route
@@ -39,4 +40,8 @@ Route::middleware(['auth'])->group(function () {
     // Account Statement Routes
     Route::get('account-statement', [AccountStatementController::class, 'index'])->name('account-statement.index');
     Route::post('account-statement/generate', [AccountStatementController::class, 'generate'])->name('account-statement.generate');
+    
+    // Change Password Routes
+    Route::get('change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('password.change.form');
+    Route::post('change-password', [ChangePasswordController::class, 'changePassword'])->name('password.change');
 });

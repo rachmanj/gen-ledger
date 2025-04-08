@@ -36,18 +36,30 @@
         <!-- Right navbar links -->
         <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
             <li class="nav-item dropdown">
-                <a id="dropdownPayreq" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    class="nav-link dropdown-toggle">{{ auth()->user()->name }} ({{ auth()->user()->project }})</a>
-                <ul aria-labelledby="dropdownPayreq" class="dropdown-menu border-0 shadow">
-
-                    <li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                        <a href="#" class="dropdown-item"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                    </li>
-                </ul>
+                <a id="profileDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    class="nav-link dropdown-toggle d-flex align-items-center">
+                    <i class="fas fa-user-circle mr-2" style="font-size: 1.25rem;"></i>
+                    <span>{{ auth()->user()->name }}</span>
+                    @if (auth()->user()->project)
+                        <span class="ml-1 text-sm text-muted">({{ auth()->user()->project }})</span>
+                    @endif
+                </a>
+                <div class="dropdown-menu dropdown-menu-right border-0 shadow" aria-labelledby="profileDropdown">
+                    <div class="dropdown-header bg-light py-2">
+                        <strong>PROFILE</strong>
+                    </div>
+                    <a href="{{ route('password.change.form') }}" class="dropdown-item">
+                        <i class="fas fa-key mr-2"></i> Change Password
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <a href="#" class="dropdown-item"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </div>
             </li>
         </ul>
     </div>
