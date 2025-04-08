@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('journal_entry_id')->constrained()->onDelete('cascade');
             $table->foreignId('account_id')->constrained();
             $table->text('description')->nullable(); // remarks
+            $table->string('unit_no')->nullable();
             $table->string('project_code')->nullable();
             $table->string('department_name')->nullable();
             $table->decimal('debit_amount', 15, 2)->default(0.00);

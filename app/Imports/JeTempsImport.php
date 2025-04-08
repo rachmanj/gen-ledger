@@ -20,6 +20,8 @@ class JeTempsImport implements ToModel, WithHeadingRow
             'project_code' => $row['project_code'] ?? null,
             'department' => $row['department'] ?? null,
             'account' => $row['account'] ?? null,
+            'account_name' => $row['account_name'] ?? null,
+            'unit_no' => $row['unit_no'] ?? null,
             'debit' => $row['debit'] ?? 0.00,
             'credit' => $row['credit'] ?? 0.00,
             'fc_debit' => $row['fc_debit'] ?? 0.00,

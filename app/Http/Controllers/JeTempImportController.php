@@ -104,7 +104,7 @@ class JeTempImportController extends Controller
                     $account = Account::firstOrCreate(
                         ['account_number' => $line->account],
                         [
-                            'name' => $line->account,
+                            'name' => $line->account_name ?? $line->account,
                             'account_type_id' => 1, // Default account type, adjust as needed
                             'normal_balance' => $line->debit > 0 ? 'debit' : 'credit',
                             'is_active' => true
@@ -121,6 +121,7 @@ class JeTempImportController extends Controller
                         'journal_entry_id' => $journalEntry->id,
                         'account_id' => $account->id,
                         'description' => $line->remarks,
+                        'unit_no' => $line->unit_no,
                         'project_code' => $line->project_code,
                         'department_name' => $line->department,
                         'debit_amount' => $line->debit,

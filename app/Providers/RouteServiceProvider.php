@@ -24,12 +24,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Fixed API rate limiter definition
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
         $this->routes(function () {
-            // API Routes
+            // API Routes - removed auth middleware and added specific settings
             Route::middleware(['api'])
                 ->prefix('api')
                 ->group(function () {

@@ -7,6 +7,7 @@ use App\Models\JournalEntry;
 use App\Models\JournalEntryLine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AccountStatementController extends Controller
 {
@@ -36,26 +37,54 @@ class AccountStatementController extends Controller
 
     public function apiGenerate(Request $request)
     {
-        $request->validate([
-            'account_number' => 'required|exists:accounts,account_number',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'project_code' => 'nullable|string'
+        // Log incoming request
+        Log::info('API Generate Statement Request', [
+            'request_data' => $request->all(),
+            'headers' => $request->header(),
+            'method' => $request->method()
         ]);
 
         try {
-            $account = Account::where('account_number', $request->account_number)->firstOrFail();
-            $statementData = $this->generateStatement($account->id, $request->start_date, $request->end_date, $request->project_code);
+            $request->validate([
+                'account_number' => 'required|exists:accounts,account_number',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'project_code' => 'nullable|string'
+            ]);
+
+            try {
+                $account = Account::where('account_number', $request->account_number)->firstOrFail();
+                $statementData = $this->generateStatement($account->id, $request->start_date, $request->end_date, $request->project_code);
+
+                Log::info('API Generate Statement Success', [
+                    'account_number' => $request->account_number
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $statementData
+                ]);
+            } catch (\Exception $e) {
+                Log::error('API Generate Statement Error', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 400);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('API Generate Statement Validation Error', [
+                'errors' => $e->errors()
+            ]);
 
             return response()->json([
-                'success' => true,
-                'data' => $statementData
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         }
     }
 
@@ -78,10 +107,12 @@ class AccountStatementController extends Controller
             'date' => $startDate,
             'description' => 'Opening Balance',
             'doc_num' => '',
+            'doc_type' => '',
+            'sap_user' => '',
             'project_code' => $projectCode ?? '',
-            'debit' => 0,
-            'credit' => 0,
-            'balance' => $runningBalance
+            'debit' => number_format(0, 2, '.', ','),
+            'credit' => number_format(0, 2, '.', ','),
+            'balance' => number_format($runningBalance, 2, '.', ',')
         ]);
 
         // Process each transaction
@@ -96,10 +127,12 @@ class AccountStatementController extends Controller
                 'date' => $transaction->posting_date,
                 'description' => $transaction->description,
                 'doc_num' => $transaction->doc_num,
+                'doc_type' => $transaction->doc_type ?? '',
+                'sap_user' => $transaction->sap_user ?? '',
                 'project_code' => $transaction->project_code,
-                'debit' => $transaction->debit_amount,
-                'credit' => $transaction->credit_amount,
-                'balance' => $runningBalance
+                'debit' => number_format($transaction->debit_amount, 2, '.', ','),
+                'credit' => number_format($transaction->credit_amount, 2, '.', ','),
+                'balance' => number_format($runningBalance, 2, '.', ',')
             ]);
         }
 
@@ -152,6 +185,8 @@ class AccountStatementController extends Controller
         return $query->select(
             'journal_entries.posting_date',
             'journal_entries.doc_num',
+            'journal_entries.doc_type',
+            'journal_entries.sap_user',
             'journal_entry_lines.description',
             'journal_entry_lines.project_code',
             'journal_entry_lines.debit_amount',

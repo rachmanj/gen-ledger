@@ -21,10 +21,12 @@ return new class extends Migration
             $table->string('project_code')->nullable();
             $table->string('department')->nullable();
             $table->string('account')->nullable();
+            $table->string('account_name')->nullable();
             $table->decimal('debit', 15, 2)->default(0.00);
             $table->decimal('credit', 15, 2)->default(0.00);
             $table->decimal('fc_debit', 15, 2)->default(0.00);
             $table->decimal('fc_credit', 15, 2)->default(0.00);
+            $table->string('unit_no')->nullable();
             $table->text('remarks')->nullable();
             $table->string('user_code')->nullable();
             $table->string('user_name')->nullable();
