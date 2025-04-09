@@ -22,6 +22,8 @@ class AccountController extends Controller
                     'accounts.name',
                     'accounts.account_type_id',
                     'accounts.normal_balance',
+                    'accounts.opening_balance',
+                    'accounts.opening_balance_date',
                     'accounts.description',
                     'accounts.parent_account_id',
                     'accounts.is_active',
@@ -55,7 +57,9 @@ class AccountController extends Controller
                 ->make(true);
         }
 
-        return view('accounts.index');
+        $accountTypes = AccountType::all();
+        $parentAccounts = Account::where('is_active', true)->get();
+        return view('accounts.index', compact('accountTypes', 'parentAccounts'));
     }
 
     /**
@@ -94,6 +98,9 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
+        if (request()->ajax()) {
+            return response()->json($account);
+        }
         return view('accounts.show', compact('account'));
     }
 

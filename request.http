@@ -5,10 +5,9 @@ Accept: application/json
 X-API-KEY: arkagenledger4321
 
 {
-    "account_number": "11101007",
-    "start_date": "2025-04-01",
-    "end_date": "2025-04-30", 
-    "project_code0": "023C"
+    "account_number": "11101001",
+    "start_date": "2025-01-01",
+    "end_date": "2025-04-30"
 }
 
 ### Test the statements GET test route
@@ -42,4 +41,14 @@ GET http://localhost:8000/api/test
 ###
 GET http://localhost:8000/api/debug
 
+### Generate Account Statement
+POST http://103.31.38.186/ledger/api/v1/statements
+Content-Type: application/json
+Accept: application/json
+X-API-KEY: genledger78951
 
+{
+    "account_number": "11101001",
+    "start_date": "2025-01-01",
+    "end_date": "2025-01-31"
+}
