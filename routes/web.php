@@ -7,11 +7,6 @@ use App\Http\Controllers\AccountStatementController;
 use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Route;
 
-// Test route
-Route::get('/test-route', function () {
-    return 'Test route is working';
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,4 +39,5 @@ Route::middleware(['auth'])->group(function () {
     // Change Password Routes
     Route::get('change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('password.change.form');
     Route::post('change-password', [ChangePasswordController::class, 'changePassword'])->name('password.change');
+
 });

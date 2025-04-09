@@ -302,7 +302,7 @@ class AccountStatementController extends Controller
         // Add transactions before start date
         $query = JournalEntryLine::join('journal_entries', 'journal_entries.id', '=', 'journal_entry_lines.journal_entry_id')
             ->where('journal_entry_lines.account_id', $account->id)
-            ->where('journal_entries.posting_date', '<', $startDate);
+            ->where('journal_entries.entry_date', '<', $startDate);
 
         if ($projectCode) {
             $query->where('journal_entry_lines.project_code', $projectCode);
