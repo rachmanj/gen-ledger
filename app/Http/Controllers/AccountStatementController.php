@@ -290,12 +290,6 @@ class AccountStatementController extends Controller
             if ($openingBalanceDate->lt($statementStartDate)) {
                 // Only include opening balance if it's before the start date
                 $openingBalance = floatval($account->opening_balance);
-                Log::debug('Using account opening balance', [
-                    'account_number' => $account->account_number,
-                    'opening_balance' => $account->opening_balance,
-                    'opening_balance_date' => $account->opening_balance_date,
-                    'floatval' => $openingBalance
-                ]);
             }
         }
         
@@ -330,15 +324,6 @@ class AccountStatementController extends Controller
         }
         
         $openingBalance += $transactionBalance;
-        
-        Log::debug('Final opening balance calculation', [
-            'account_number' => $account->account_number,
-            'account_balance' => $account->opening_balance ?? 0,
-            'total_debit' => $totalDebit,
-            'total_credit' => $totalCredit,
-            'transaction_balance' => $transactionBalance,
-            'final_opening_balance' => $openingBalance
-        ]);
         
         return $openingBalance;
     }
