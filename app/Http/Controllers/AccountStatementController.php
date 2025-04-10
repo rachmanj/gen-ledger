@@ -97,8 +97,19 @@ class AccountStatementController extends Controller
      */
     private function formatNumber($number)
     {
-        // Indonesian format: 1.234.567,89 (dot as thousands separator, comma as decimal separator)
+        // Format number with 2 decimal places using Indonesian locale
         return number_format($number, 2, ',', '.');
+    }
+
+    /**
+     * Format a date in the format "23-Jun-2025"
+     * 
+     * @param string $date The date string in Y-m-d format
+     * @return string
+     */
+    private function formatDate($date)
+    {
+        return Carbon::parse($date)->format('d-M-Y');
     }
 
     /**
@@ -127,15 +138,16 @@ class AccountStatementController extends Controller
         
         // Add opening balance line
         $statementLines[] = [
-            'date' => $startDate,
+            'tx_num' => '',
+            'date' => $this->formatDate($startDate),
             'description' => 'Opening Balance',
             'doc_num' => '',
             'doc_type' => '',
             'sap_user' => '',
             'project_code' => $projectCode ?? '',
-            'debit' => 0,  // Always 0 for opening balance
-            'credit' => 0, // Always 0 for opening balance
-            'balance' => $openingBalance // Use the calculated opening balance
+            'debit' => $this->formatNumber(0),  // Always 0 for opening balance
+            'credit' => $this->formatNumber(0), // Always 0 for opening balance
+            'balance' => $this->formatNumber($openingBalance) // Use the calculated opening balance
         ];
         
         // Process each transaction
@@ -153,15 +165,16 @@ class AccountStatementController extends Controller
             
             // Add transaction line
             $statementLines[] = [
-                'date' => $transaction->posting_date,
+                'tx_num' => $transaction->tx_num,
+                'date' => $this->formatDate($transaction->posting_date),
                 'description' => $transaction->description,
                 'doc_num' => $transaction->doc_num,
                 'doc_type' => $transaction->doc_type ?? '',
                 'sap_user' => $transaction->sap_user ?? '',
                 'project_code' => $transaction->project_code,
-                'debit' => $debitAmount,
-                'credit' => $creditAmount,
-                'balance' => $runningBalance
+                'debit' => $this->formatNumber($debitAmount),
+                'credit' => $this->formatNumber($creditAmount),
+                'balance' => $this->formatNumber($runningBalance)
             ];
         }
         
@@ -171,8 +184,8 @@ class AccountStatementController extends Controller
                 'account_number' => $account->account_number,
                 'name' => $account->name
             ],
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'startDate' => $this->formatDate($startDate),
+            'endDate' => $this->formatDate($endDate),
             'project_code' => $projectCode,
             'statementLines' => $statementLines
         ];
@@ -346,7 +359,8 @@ class AccountStatementController extends Controller
             'journal_entry_lines.description',
             'journal_entry_lines.project_code',
             'journal_entry_lines.debit_amount',
-            'journal_entry_lines.credit_amount'
+            'journal_entry_lines.credit_amount',
+            'journal_entries.tx_num'
         )
         ->orderBy('journal_entries.posting_date')
         ->orderBy('journal_entries.id')
